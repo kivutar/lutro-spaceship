@@ -193,6 +193,12 @@ function scientist:on_collide(e1, e2, dx, dy)
 		self.hit = 0.5
 		self.xspeed = - self.xspeed
 		self.x = self.x + dx
+	elseif e2.type == "biglaser" and e2.stance == "on" and self.hit == 0 then
+		lutro.audio.play(sfx_laserhit)
+		screen_shake = 0.25
+		self.hit = 0.5
+		self.xspeed = - self.xspeed
+		self.x = self.x + dx
 	elseif e2.type == "crab" and self.hit == 0 then
 		lutro.audio.play(sfx_hit)
 		screen_shake = 0.25

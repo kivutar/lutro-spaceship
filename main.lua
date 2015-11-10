@@ -4,6 +4,7 @@ require "anim"
 require "scientist"
 require "door"
 require "laser"
+require "biglaser"
 require "crab"
 
 function lutro.conf(t)
@@ -18,6 +19,8 @@ add_entity_from_map = function(object)
 		table.insert(entities, newDoor(object))
 	elseif object.type == "laser" then
 		table.insert(entities, newLaser(object))
+	elseif object.type == "biglaser" then
+		table.insert(entities, newBigLaser(object))
 	elseif object.type == "crab" then
 		table.insert(entities, newCrab(object))
 	end

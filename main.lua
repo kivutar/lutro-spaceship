@@ -2,6 +2,7 @@ require "global"
 require "tiled"
 require "anim"
 require "scientist"
+require "lifebar"
 require "door"
 require "laser"
 require "biglaser"
@@ -43,6 +44,7 @@ function lutro.load()
 	map = tiled_load("assets/spaceship.json")
 	tiled_load_objects(map, add_entity_from_map)
 	scientist = newScientist()
+	lifebar = newLifeBar()
 	table.insert(entities, scientist)
 end
 
@@ -104,4 +106,6 @@ function lutro.draw()
 	tiled_draw_layer(map.layers[3])
 
 	lutro.graphics.pop()
+
+	lifebar:draw(dt)
 end

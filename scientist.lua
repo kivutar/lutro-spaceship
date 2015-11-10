@@ -17,6 +17,8 @@ function newScientist()
 	n.stance = "stand"
 	n.DO_JUMP = 0
 	n.hit = 0
+	n.hp = 3
+	n.maxhp = 3
 	n.type = "character"
 
 	n.animations = {
@@ -193,12 +195,14 @@ function scientist:on_collide(e1, e2, dx, dy)
 		self.hit = 0.5
 		self.xspeed = - self.xspeed
 		self.x = self.x + dx
+		self.hp = self.hp - 1
 	elseif e2.type == "biglaser" and e2.stance == "on" and self.hit == 0 then
 		lutro.audio.play(sfx_laserhit)
 		screen_shake = 0.25
 		self.hit = 0.5
 		self.xspeed = - self.xspeed
 		self.x = self.x + dx
+		self.hp = self.hp - 2
 	elseif e2.type == "crab" and self.hit == 0 then
 		lutro.audio.play(sfx_hit)
 		screen_shake = 0.25
@@ -211,5 +215,6 @@ function scientist:on_collide(e1, e2, dx, dy)
 		self.y = self.y - 1
 		self.yspeed = -50
 		self.x = self.x + dx
+		self.hp = self.hp - 0.5
 	end
 end

@@ -5,7 +5,7 @@ crab.__index = crab
 
 function newCrab(object)
 	local n = object
-	n.width = 14
+	n.width = 32
 	n.height = 14
 	n.xspeed = 0
 	n.yspeed = 0
@@ -14,7 +14,6 @@ function newCrab(object)
 	n.stance = "run"
 	n.DO_JUMP = 0
 	n.DIR = 0
-	n.type = "character"
 
 	n.animations = {
 		run = {
@@ -32,7 +31,7 @@ end
 
 function crab:on_the_ground()
 	return solid_at(self.x + 1, self.y+14, self)
-		or solid_at(self.x + 11, self.y+14, self)
+		or solid_at(self.x + 32, self.y+14, self)
 end
 
 function crab:update(dt)
@@ -66,7 +65,7 @@ function crab:update(dt)
 end
 
 function crab:draw()
-	self.anim:draw(self.x - 9, self.y - 18)
+	self.anim:draw(self.x, self.y - 18)
 end
 
 function crab:on_collide(e1, e2, dx, dy)

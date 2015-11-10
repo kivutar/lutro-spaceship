@@ -5,8 +5,8 @@ scientist.__index = scientist
 
 function newScientist()
 	local n = {}
-	n.width = 16 -- 16
-	n.height = 24 -- 24
+	n.width = 12
+	n.height = 24
 	n.xspeed = 0
 	n.yspeed = 0
 	n.xaccel = 100
@@ -16,6 +16,7 @@ function newScientist()
 	n.direction = "left"
 	n.stance = "stand"
 	n.DO_JUMP = 0
+	n.hit = 0
 	n.type = "character"
 
 	n.animations = {
@@ -24,6 +25,12 @@ function newScientist()
 				"assets/scientist_stand_left.png"),  32, 32, 1, 10),
 			right = newAnimation(lutro.graphics.newImage(
 				"assets/scientist_stand_right.png"), 32, 32, 1, 10)
+		},
+		hit = {
+			left  = newAnimation(lutro.graphics.newImage(
+				"assets/scientist_hit_left.png"),  32, 32, 1, 10),
+			right = newAnimation(lutro.graphics.newImage(
+				"assets/scientist_hit_right.png"), 32, 32, 1, 10)
 		},
 		fall = {
 			left  = newAnimation(lutro.graphics.newImage(
@@ -48,7 +55,9 @@ function newScientist()
 	n.anim = n.animations[n.stance][n.direction]
 	n.sfx = {
 		jump = lutro.audio.newSource("assets/jump.wav"),
-		step = lutro.audio.newSource("assets/step.wav")
+		step = lutro.audio.newSource("assets/step.wav"),
+		hit  = lutro.audio.newSource("assets/hit.wav"),
+		laserhit  = lutro.audio.newSource("assets/laser.wav"),
 	}
 	return setmetatable(n, scientist)
 end
@@ -59,6 +68,12 @@ function scientist:on_the_ground()
 end
 
 function scientist:update(dt)
+	if self.hit > 0 then
+		self.hit = self.hit - dt
+	else
+		self.hit = 0
+	end
+
 	local JOY_LEFT  = lutro.input.joypad("left")
 	local JOY_RIGHT = lutro.input.joypad("right")
 	local JOY_A     = lutro.input.joypad("a")
@@ -139,6 +154,10 @@ function scientist:update(dt)
 		end
 	end
 
+	if self.hit > 0 then
+		self.stance = "hit"
+	end
+
 	local anim = self.animations[self.stance][self.direction]
 	-- always animate from first frame 
 	if anim ~= self.anim then
@@ -150,7 +169,7 @@ function scientist:update(dt)
 end
 
 function scientist:draw()
-	self.anim:draw(self.x - 8, self.y - 8)
+	self.anim:draw(self.x - 10, self.y - 8)
 end
 
 function scientist:on_collide(e1, e2, dx, dy)
@@ -173,8 +192,23 @@ function scientist:on_collide(e1, e2, dx, dy)
 			self.x = tonumber(e2.properties.x)
 		end
 		self.y = self.y + tonumber(e2.properties.y)
-	elseif e2.type == "laser" then
+	elseif e2.type == "laser" and self.hit == 0 then
+		lutro.audio.play(self.sfx.laserhit)
+		screen_shake = 0.25
+		self.hit = 0.5
 		self.xspeed = - self.xspeed
+		self.x = self.x + dx
+	elseif e2.type == "crab" and self.hit == 0 then
+		lutro.audio.play(self.sfx.hit)
+		screen_shake = 0.25
+		self.hit = 0.5
+		if dx > 0 then
+			self.xspeed = 100
+		else
+			self.xspeed = -100
+		end
+		self.y = self.y - 1
+		self.yspeed = -50
 		self.x = self.x + dx
 	end
 end

@@ -26,6 +26,7 @@ end
 function lutro.load()
 	camera_x = 0
 	camera_y = 0
+	screen_shake = 0
 	lutro.graphics.setBackgroundColor(0, 0, 0)
 	stars = lutro.graphics.newImage("assets/stars.png")
 	map = tiled_load("assets/spaceship.json")
@@ -35,6 +36,10 @@ function lutro.load()
 end
 
 function lutro.update(dt)
+	if screen_shake > 0 then
+		screen_shake = screen_shake - dt
+	end
+
 	for i=1, #entities do
 		if entities[i].update then
 			entities[i]:update(dt)
@@ -68,7 +73,15 @@ function lutro.draw()
 		camera_y = -(map.height * map.tileheight) + SCREEN_HEIGHT
 	end
 
-	lutro.graphics.translate(camera_x, camera_y)
+	-- Shake camera if hit
+	local shake_x = 0
+	local shake_y = 0
+	if screen_shake > 0 then
+		shake_x = 5*(math.random()-0.5)
+		shake_y = 5*(math.random()-0.5)
+	end
+
+	lutro.graphics.translate(camera_x + shake_x, camera_y + shake_y)
 
 	tiled_draw_layer(map.layers[1])
 	tiled_draw_layer(map.layers[2])

@@ -53,12 +53,7 @@ function newScientist()
 	}
 
 	n.anim = n.animations[n.stance][n.direction]
-	n.sfx = {
-		jump = lutro.audio.newSource("assets/jump.wav"),
-		step = lutro.audio.newSource("assets/step.wav"),
-		hit  = lutro.audio.newSource("assets/hit.wav"),
-		laserhit  = lutro.audio.newSource("assets/laser.wav"),
-	}
+
 	return setmetatable(n, scientist)
 end
 
@@ -94,7 +89,7 @@ function scientist:update(dt)
 	if self.DO_JUMP == 1 and self:on_the_ground() then
 		self.y = self.y - 1
 		self.yspeed = -100
-		lutro.audio.play(self.sfx.jump)
+		lutro.audio.play(sfx_jump)
 	end
 
 	if self.DO_JUMP > 1 and self.DO_JUMP < 24 and self.yspeed < -90 then
@@ -177,7 +172,7 @@ function scientist:on_collide(e1, e2, dx, dy)
 		if math.abs(dy) < math.abs(dx) and dy ~= 0 then
 			self.yspeed = 0
 			self.y = self.y + dy
-			lutro.audio.play(self.sfx.step)
+			lutro.audio.play(sfx_step)
 		end
 
 		if math.abs(dx) < math.abs(dy) and dx ~= 0 then
@@ -193,13 +188,13 @@ function scientist:on_collide(e1, e2, dx, dy)
 		end
 		self.y = self.y + tonumber(e2.properties.y)
 	elseif e2.type == "laser" and self.hit == 0 then
-		lutro.audio.play(self.sfx.laserhit)
+		lutro.audio.play(sfx_laserhit)
 		screen_shake = 0.25
 		self.hit = 0.5
 		self.xspeed = - self.xspeed
 		self.x = self.x + dx
 	elseif e2.type == "crab" and self.hit == 0 then
-		lutro.audio.play(self.sfx.hit)
+		lutro.audio.play(sfx_hit)
 		screen_shake = 0.25
 		self.hit = 0.5
 		if dx > 0 then

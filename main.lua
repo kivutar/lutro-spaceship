@@ -27,6 +27,14 @@ add_entity_from_map = function(object)
 end
 
 function lutro.load()
+
+	sfx_jump          = lutro.audio.newSource("assets/jump.wav")
+	sfx_step          = lutro.audio.newSource("assets/step.wav")
+	sfx_hit           = lutro.audio.newSource("assets/hit.wav")
+	sfx_laserhit      = lutro.audio.newSource("assets/laser.wav")
+	sfx_biglaser_on   = lutro.audio.newSource("assets/biglaser_on.wav")
+	sfx_biglaser_warn = lutro.audio.newSource("assets/biglaser_warn.wav")
+
 	camera_x = 0
 	camera_y = 0
 	screen_shake = 0

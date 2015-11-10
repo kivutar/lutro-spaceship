@@ -19,11 +19,6 @@ function newBigLaser(object)
 
 	n.anim = n.animations[n.stance]
 
-	n.sfx = {
-		on   = lutro.audio.newSource("assets/biglaser_on.wav"),
-		warn = lutro.audio.newSource("assets/biglaser_warn.wav"),
-	}
-
 	return setmetatable(n, biglaser)
 end
 
@@ -43,9 +38,9 @@ function biglaser:update(dt)
 	local anim = self.animations[self.stance]
 	if self.anim ~= anim then
 		if self.stance == "on" then
-			lutro.audio.play(self.sfx.on)
+			lutro.audio.play(sfx_biglaser_on)
 		elseif self.stance == "warn" then
-			lutro.audio.play(self.sfx.warn)
+			lutro.audio.play(sfx_biglaser_warn)
 		end
 		self.anim = anim
 	end

@@ -98,12 +98,14 @@ function lutro.draw()
 
 	tiled_draw_layer(map.layers[1])
 	tiled_draw_layer(map.layers[2])
+	tiled_draw_layer(map.layers[3])
 	for i=1, #entities do
 		if entities[i].draw then
 			entities[i]:draw(dt)
 		end
 	end
 	tiled_draw_layer(map.layers[3])
+	tiled_draw_layer(map.layers[4])
 
 	lutro.graphics.pop()
 

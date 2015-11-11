@@ -7,6 +7,7 @@ require "door"
 require "laser"
 require "biglaser"
 require "crab"
+require "saber"
 
 function lutro.conf(t)
 	t.width  = SCREEN_WIDTH
@@ -30,11 +31,14 @@ end
 function lutro.load()
 
 	sfx_jump          = lutro.audio.newSource("assets/jump.wav")
+	sfx_saber         = lutro.audio.newSource("assets/saber.wav")
 	sfx_step          = lutro.audio.newSource("assets/step.wav")
 	sfx_hit           = lutro.audio.newSource("assets/hit.wav")
 	sfx_laserhit      = lutro.audio.newSource("assets/laser.wav")
 	sfx_biglaser_on   = lutro.audio.newSource("assets/biglaser_on.wav")
 	sfx_biglaser_warn = lutro.audio.newSource("assets/biglaser_warn.wav")
+	sfx_robot_hit     = lutro.audio.newSource("assets/robot_hit.wav")
+	sfx_robot_die     = lutro.audio.newSource("assets/robot_die.wav")
 
 	camera_x = 0
 	camera_y = 0
@@ -54,7 +58,7 @@ function lutro.update(dt)
 	end
 
 	for i=1, #entities do
-		if entities[i].update then
+		if entities[i] and entities[i].update then
 			entities[i]:update(dt)
 		end
 	end

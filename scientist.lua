@@ -16,10 +16,12 @@ function newScientist()
 	n.direction = "left"
 	n.stance = "stand"
 	n.DO_JUMP = 0
+	n.DO_SABER = 0
 	n.hit = 0
 	n.hp = 3
 	n.maxhp = 3
 	n.type = "character"
+	n.saber = nil
 
 	n.animations = {
 		stand = {
@@ -52,6 +54,12 @@ function newScientist()
 			right = newAnimation(lutro.graphics.newImage(
 				"assets/scientist_run_right.png"), 32, 32, 2, 10)
 		},
+		saber = {
+			left  = newAnimation(lutro.graphics.newImage(
+				"assets/scientist_saber_left.png"),  32, 32, 1, 60),
+			right = newAnimation(lutro.graphics.newImage(
+				"assets/scientist_saber_right.png"), 32, 32, 1, 60)
+		},
 	}
 
 	n.anim = n.animations[n.stance][n.direction]
@@ -74,6 +82,7 @@ function scientist:update(dt)
 	local JOY_LEFT  = lutro.input.joypad("left")
 	local JOY_RIGHT = lutro.input.joypad("right")
 	local JOY_A     = lutro.input.joypad("a")
+	local JOY_B     = lutro.input.joypad("b")
 
 	-- gravity
 	if not self:on_the_ground() then
@@ -86,6 +95,19 @@ function scientist:update(dt)
 		self.DO_JUMP = self.DO_JUMP + 1
 	else
 		self.DO_JUMP = 0
+	end
+
+	-- saber
+	if JOY_B then
+		self.DO_SABER = self.DO_SABER + 1
+	else
+		self.DO_SABER = 0
+	end
+
+	if self.DO_SABER == 1 then
+		lutro.audio.play(sfx_saber)
+		self.saber = newSaber({holder = self})
+		table.insert(entities, self.saber)
 	end
 
 	if self.DO_JUMP == 1 and self:on_the_ground() then
@@ -119,9 +141,10 @@ function scientist:update(dt)
 	self.x = self.x + self.xspeed * dt;
 
 	-- decelerating
-	if  not (JOY_RIGHT and self.xspeed > 0)
+	if not (JOY_RIGHT and self.xspeed > 0)
 	and not (JOY_LEFT  and self.xspeed < 0)
 	and self:on_the_ground()
+	or (self.DO_SABER > 0 and self.DO_SABER < 8 and self:on_the_ground())
 	then
 		if self.xspeed > 0 then
 			self.xspeed = self.xspeed - 10
@@ -148,6 +171,17 @@ function scientist:update(dt)
 			self.stance = "fall"
 		else
 			self.stance = "jump"
+		end
+	end
+
+	if self.DO_SABER > 0 and (self.DO_SABER < 20 or not self:on_the_ground()) then
+		self.stance = "saber"
+	else
+		self.saber = nil
+		for i=1, #entities do
+			if entities[i].type == "saber" then
+				table.remove(entities, i)
+			end
 		end
 	end
 
@@ -203,7 +237,7 @@ function scientist:on_collide(e1, e2, dx, dy)
 		self.xspeed = - self.xspeed
 		self.x = self.x + dx
 		self.hp = self.hp - 2
-	elseif e2.type == "crab" and self.hit == 0 then
+	elseif e2.type == "crab" and self.hit == 0 and e2.die == 0 then
 		lutro.audio.play(sfx_hit)
 		screen_shake = 0.25
 		self.hit = 0.5

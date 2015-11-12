@@ -8,7 +8,7 @@ function newSaber(object)
 	if n.holder.direction == "right" then
 		n.x = n.holder.x + 13
 	end
-	n.width = 12
+	n.width = 14
 	n.height = 5
 	n.type = "saber"
 	n.saber = {}
@@ -29,7 +29,7 @@ function saber:update(dt)
 end
 
 function saber:draw()
-	self.anim:draw(self.x, self.y)
+	--self.anim:draw(self.x, self.y)
 end
 
 function saber:on_collide(e1, e2, dx, dy)

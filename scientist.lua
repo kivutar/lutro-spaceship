@@ -17,6 +17,7 @@ function newScientist()
 	n.stance = "stand"
 	n.DO_JUMP = 0
 	n.DO_SABER = 0
+	n.sab = 0
 	n.hit = 0
 	n.hp = 3
 	n.maxhp = 3
@@ -26,39 +27,45 @@ function newScientist()
 	n.animations = {
 		stand = {
 			left  = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_stand_left.png"),  32, 32, 1, 10),
+				"assets/scientist_stand_left.png"),  48, 48, 1, 10),
 			right = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_stand_right.png"), 32, 32, 1, 10)
+				"assets/scientist_stand_right.png"), 48, 48, 1, 10)
 		},
 		hit = {
 			left  = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_hit_left.png"),  32, 32, 1, 10),
+				"assets/scientist_hit_left.png"),  48, 48, 1, 10),
 			right = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_hit_right.png"), 32, 32, 1, 10)
+				"assets/scientist_hit_right.png"), 48, 48, 1, 10)
 		},
 		fall = {
 			left  = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_fall_left.png"),  32, 32, 1, 10),
+				"assets/scientist_fall_left.png"),  48, 48, 1, 10),
 			right = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_fall_right.png"), 32, 32, 1, 10)
+				"assets/scientist_fall_right.png"), 48, 48, 1, 10)
 		},
 		jump = {
 			left  = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_jump_left.png"),  32, 32, 1, 10),
+				"assets/scientist_jump_left.png"),  48, 48, 1, 10),
 			right = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_jump_right.png"), 32, 32, 1, 10)
+				"assets/scientist_jump_right.png"), 48, 48, 1, 10)
 		},
 		run = {
 			left  = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_run_left.png"),  32, 32, 2, 10),
+				"assets/scientist_run_left.png"),  48, 48, 2, 10),
 			right = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_run_right.png"), 32, 32, 2, 10)
+				"assets/scientist_run_right.png"), 48, 48, 2, 10)
 		},
 		saber = {
 			left  = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_saber_left.png"),  32, 32, 1, 60),
+				"assets/scientist_saber_left.png"),  48, 48, 1, 60),
 			right = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_saber_right.png"), 32, 32, 1, 60)
+				"assets/scientist_saber_right.png"), 48, 48, 1, 60)
+		},
+		sword = {
+			left  = newAnimation(lutro.graphics.newImage(
+				"assets/scientist_sword_left.png"),  48, 48, 1, 15),
+			right = newAnimation(lutro.graphics.newImage(
+				"assets/scientist_sword_right.png"), 48, 48, 1, 15)
 		},
 	}
 
@@ -79,9 +86,21 @@ function scientist:update(dt)
 		self.hit = 0
 	end
 
+	if self.sab > 0 then
+		self.sab = self.sab - dt
+	else
+		self.sab = 0
+		self.saber = nil
+		for i=1, #entities do
+			if entities[i].type == "saber" then
+				table.remove(entities, i)
+			end
+		end
+	end
+
 	local JOY_LEFT  = lutro.input.joypad("left")
 	local JOY_RIGHT = lutro.input.joypad("right")
-	local JOY_A     = lutro.input.joypad("a")
+	local JOY_Y     = lutro.input.joypad("y")
 	local JOY_B     = lutro.input.joypad("b")
 
 	-- gravity
@@ -91,20 +110,21 @@ function scientist:update(dt)
 	end
 
 	-- jumping
-	if JOY_A then
+	if JOY_B then
 		self.DO_JUMP = self.DO_JUMP + 1
 	else
 		self.DO_JUMP = 0
 	end
 
 	-- saber
-	if JOY_B then
+	if JOY_Y then
 		self.DO_SABER = self.DO_SABER + 1
 	else
 		self.DO_SABER = 0
 	end
 
 	if self.DO_SABER == 1 then
+		self.sab = 0.3
 		lutro.audio.play(sfx_saber)
 		self.saber = newSaber({holder = self})
 		table.insert(entities, self.saber)
@@ -174,15 +194,10 @@ function scientist:update(dt)
 		end
 	end
 
-	if self.DO_SABER > 0 and (self.DO_SABER < 20 or not self:on_the_ground()) then
-		self.stance = "saber"
+	if self.sab > 0 then
+		self.stance = "sword"
 	else
-		self.saber = nil
-		for i=1, #entities do
-			if entities[i].type == "saber" then
-				table.remove(entities, i)
-			end
-		end
+
 	end
 
 	if self.hit > 0 then
@@ -200,7 +215,7 @@ function scientist:update(dt)
 end
 
 function scientist:draw()
-	self.anim:draw(self.x - 10, self.y - 8)
+	self.anim:draw(self.x - 10 - 8, self.y - 8-16)
 end
 
 function scientist:on_collide(e1, e2, dx, dy)
@@ -208,7 +223,7 @@ function scientist:on_collide(e1, e2, dx, dy)
 		if math.abs(dy) < math.abs(dx) and dy ~= 0 then
 			self.yspeed = 0
 			self.y = self.y + dy
-			lutro.audio.play(sfx_step)
+			--lutro.audio.play(sfx_step)
 		end
 
 		if math.abs(dx) < math.abs(dy) and dx ~= 0 then

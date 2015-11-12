@@ -15,7 +15,7 @@ function newCrab(object)
 	n.DO_JUMP = 0
 	n.hit = 0
 	n.die = 0
-	n.hp = 2
+	n.hp = 3
 	n.DIR = 0
 
 	n.animations = {

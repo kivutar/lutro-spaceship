@@ -17,7 +17,7 @@ function newBall(object)
 
 	n.animations = {
 		roll = newAnimation(lutro.graphics.newImage(
-				"assets/ball_roll.png"), 21, 21, 1, 20),
+				"assets/ball_roll.png"), 32, 32, 1, 20),
 	}
 
 	n.anim = n.animations[n.stance]

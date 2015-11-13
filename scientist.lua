@@ -21,7 +21,7 @@ function newScientist()
 	n.hit = 0
 	n.hp = 3
 	n.maxhp = 3
-	n.type = "character"
+	n.type = "scientist"
 	n.saber = nil
 
 	n.animations = {
@@ -263,6 +263,19 @@ function scientist:on_collide(e1, e2, dx, dy)
 		end
 		self.y = self.y - 1
 		self.yspeed = -50
+		self.x = self.x + dx
+		self.hp = self.hp - 0.5
+	elseif e2.type == "ball" and self.hit == 0 and e2.die == 0 then
+		lutro.audio.play(sfx_hit)
+		screen_shake = 0.25
+		self.hit = 0.5
+		if dx > 0 then
+			self.xspeed = 50
+		else
+			self.xspeed = -50
+		end
+		self.y = self.y - 1
+		self.yspeed = -25
 		self.x = self.x + dx
 		self.hp = self.hp - 0.5
 	end

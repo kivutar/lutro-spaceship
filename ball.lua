@@ -47,13 +47,13 @@ function ball:on_collide(e1, e2, dx, dy)
 		if math.abs(dy) < math.abs(dx) and dy ~= 0 then
 			self.y = self.y + dy
 			self.yspeed = -self.yspeed
-			lutro.audio.play(self.sfx.step)
+			lutro.audio.play(sfx_step)
 		end
 
 		if math.abs(dx) < math.abs(dy) and dx ~= 0 then
 			self.x = self.x + dx
 			self.xspeed = -self.xspeed
-			lutro.audio.play(self.sfx.step)
+			lutro.audio.play(sfx_step)
 		end
 	end
 end

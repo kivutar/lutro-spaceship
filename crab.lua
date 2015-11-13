@@ -138,6 +138,11 @@ function crab:on_collide(e1, e2, dx, dy)
 			self.x = self.x + dx
 			self.DIR = not self.DIR
 		end
+	elseif e2.type == "scientist" then
+		if math.abs(dx) < math.abs(dy) and dx ~= 0 then
+			self.xspeed = 0
+			self.DIR = not self.DIR
+		end
 	elseif e2.type == "saber" and (self.hit == 0 or self.hit < 0.4) and self.die == 0 then
 		self.hp = self.hp - 1
 		if self.hp <= 0 then 

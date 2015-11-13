@@ -16,7 +16,7 @@ function newCrab(object)
 	n.hit = 0
 	n.die = 0
 	n.hp = 3
-	n.DIR = 0
+	n.GOLEFT = false
 
 	n.animations = {
 		run = {
@@ -74,8 +74,14 @@ function crab:update(dt)
 		self.y = self.y + dt * self.yspeed
 	end
 
+	if not solid_at(self.x     , self.y+14, self) and self.GOLEFT 
+	or not solid_at(self.x + 13, self.y+14, self) and not self.GOLEFT 
+	then
+		self.GOLEFT = not self.GOLEFT
+	end
+
 	-- moving
-	if self.DIR and self.hit == 0 and self.die == 0 then
+	if self.GOLEFT and self.hit == 0 and self.die == 0 then
 		self.xspeed = -50
 		self.direction = "left";
 	elseif self.hit == 0 and self.die == 0 then
@@ -130,18 +136,18 @@ function crab:on_collide(e1, e2, dx, dy)
 		if math.abs(dy) < math.abs(dx) and dy ~= 0 then
 			self.yspeed = 0
 			self.y = self.y + dy
-			lutro.audio.play(self.sfx.step)
+			lutro.audio.play(sfx_step)
 		end
 
 		if math.abs(dx) < math.abs(dy) and dx ~= 0 then
 			self.xspeed = 0
 			self.x = self.x + dx
-			self.DIR = not self.DIR
+			self.GOLEFT = not self.GOLEFT
 		end
 	elseif e2.type == "scientist" then
 		if math.abs(dx) < math.abs(dy) and dx ~= 0 then
 			self.xspeed = 0
-			self.DIR = not self.DIR
+			self.GOLEFT = not self.GOLEFT
 		end
 	elseif e2.type == "saber" and (self.hit == 0 or self.hit < 0.4) and self.die == 0 then
 		self.hp = self.hp - 1

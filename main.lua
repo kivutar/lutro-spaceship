@@ -13,6 +13,7 @@ require "leds"
 require "tube"
 require "screen"
 require "part"
+require "battery"
 
 function lutro.conf(t)
 	t.width  = SCREEN_WIDTH
@@ -38,6 +39,8 @@ add_entity_from_map = function(object)
 		table.insert(entities, newTube(object))
 	elseif object.type == "screen" then
 		table.insert(entities, newScreen(object))
+	elseif object.type == "battery" then
+		table.insert(entities, newBattery(object))
 	end
 end
 

@@ -61,6 +61,8 @@ function crab:update(dt)
 	elseif self.die < 0 then
 		self.die = 0
 		lutro.audio.play(sfx_explode)
+		table.insert(entities, newBattery(
+				{x = self.x + self.width/2, y = self.y + self.height / 2}))
 		for i=1,32 do
 			table.insert(entities, newPart(
 				{x = self.x + self.width/2, y = self.y + self.height / 2}))

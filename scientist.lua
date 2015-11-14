@@ -55,17 +55,11 @@ function newScientist()
 			right = newAnimation(lutro.graphics.newImage(
 				"assets/scientist_run_right.png"), 48, 48, 2, 10)
 		},
-		saber = {
-			left  = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_saber_left.png"),  48, 48, 1, 60),
-			right = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_saber_right.png"), 48, 48, 1, 60)
-		},
 		sword = {
 			left  = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_sword_left.png"),  48, 48, 1, 15),
+				"assets/scientist_sword_left.png"),  48, 48, 1, 30),
 			right = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_sword_right.png"), 48, 48, 1, 15)
+				"assets/scientist_sword_right.png"), 48, 48, 1, 30)
 		},
 	}
 

@@ -9,6 +9,9 @@ require "biglaser"
 require "crab"
 require "ball"
 require "saber"
+require "leds"
+require "tube"
+require "screen"
 
 function lutro.conf(t)
 	t.width  = SCREEN_WIDTH
@@ -28,6 +31,12 @@ add_entity_from_map = function(object)
 		table.insert(entities, newCrab(object))
 	elseif object.type == "ball" then
 		table.insert(entities, newBall(object))
+	elseif object.type == "leds" then
+		table.insert(entities, newLeds(object))
+	elseif object.type == "tube" then
+		table.insert(entities, newTube(object))
+	elseif object.type == "screen" then
+		table.insert(entities, newScreen(object))
 	end
 end
 
@@ -48,7 +57,7 @@ function lutro.load()
 	screen_shake = 0
 	lutro.graphics.setBackgroundColor(0, 0, 0)
 	stars = lutro.graphics.newImage("assets/stars.png")
-	map = tiled_load("assets/spaceship.json")
+	map = tiled_load("assets/spaceship5.json")
 	tiled_load_objects(map, add_entity_from_map)
 	scientist = newScientist()
 	lifebar = newLifeBar()
@@ -107,14 +116,14 @@ function lutro.draw()
 	tiled_draw_layer(map.layers[2])
 	tiled_draw_layer(map.layers[3])
 	for i=1, #entities do
-		if entities[i].draw then
-			entities[i]:draw(dt)
+		if entities[i].draw and entities[i].type ~= "scientist" then
+			entities[i]:draw()
 		end
 	end
-	tiled_draw_layer(map.layers[3])
+	scientist:draw()
 	tiled_draw_layer(map.layers[4])
 
 	lutro.graphics.pop()
 
-	lifebar:draw(dt)
+	lifebar:draw()
 end

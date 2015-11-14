@@ -257,7 +257,6 @@ function scientist:on_collide(e1, e2, dx, dy)
 		end
 		self.y = self.y - 1
 		self.yspeed = -50
-		self.x = self.x + dx
 		self.hp = self.hp - 0.5
 	elseif e2.type == "ball" and self.hit == 0 and e2.die == 0 then
 		lutro.audio.play(sfx_hit)

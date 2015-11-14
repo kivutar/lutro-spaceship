@@ -12,6 +12,7 @@ require "saber"
 require "leds"
 require "tube"
 require "screen"
+require "part"
 
 function lutro.conf(t)
 	t.width  = SCREEN_WIDTH
@@ -51,13 +52,14 @@ function lutro.load()
 	sfx_biglaser_warn = lutro.audio.newSource("assets/biglaser_warn.wav")
 	sfx_robot_hit     = lutro.audio.newSource("assets/robot_hit.wav")
 	sfx_robot_die     = lutro.audio.newSource("assets/robot_die.wav")
+	sfx_explode       = lutro.audio.newSource("assets/explode.wav")
 
 	camera_x = 0
 	camera_y = 0
 	screen_shake = 0
 	lutro.graphics.setBackgroundColor(0, 0, 0)
 	stars = lutro.graphics.newImage("assets/stars.png")
-	map = tiled_load("assets/spaceship5.json")
+	map = tiled_load("assets/spaceship.json")
 	tiled_load_objects(map, add_entity_from_map)
 	scientist = newScientist()
 	lifebar = newLifeBar()

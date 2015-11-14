@@ -60,12 +60,17 @@ function crab:update(dt)
 		self.die = self.die - dt
 	elseif self.die < 0 then
 		self.die = 0
-		self = nil
+		lutro.audio.play(sfx_explode)
+		for i=1,32 do
+			table.insert(entities, newPart(
+				{x = self.x + self.width/2, y = self.y + self.height / 2}))
+		end
 		for i=1, #entities do
-			if entities[i] and entities[i].hp == 0 then
+			if entities[i] == self then
 				table.remove(entities, i)
 			end
 		end
+
 	end
 
 	-- gravity
@@ -153,7 +158,7 @@ function crab:on_collide(e1, e2, dx, dy)
 		self.hp = self.hp - 1
 		if self.hp <= 0 then 
 			lutro.audio.play(sfx_robot_die)
-			self.die = 0.7
+			self.die = 1.0
 			self.xspeed = 0
 		else
 			lutro.audio.play(sfx_robot_hit)

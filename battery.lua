@@ -5,18 +5,18 @@ battery.__index = battery
 
 function newBattery(object)
 	local n = object
-	n.x = n.x - 3
-	n.y = n.y - 5
 	n.width = 6
 	n.height = 10
+	n.x = n.x - n.width/2
+	n.y = n.y - n.height/2
 
 	n.yspeed = -100
 	n.yaccel = 300
 
+	n.type = "battery"
+
 	n.anim = newAnimation(lutro.graphics.newImage(
 				"assets/battery.png"), n.width, n.height, 1, 10)
-
-	n.anim.timer = math.random(0, 1)
 
 	return setmetatable(n, battery)
 end

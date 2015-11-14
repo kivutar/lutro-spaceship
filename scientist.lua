@@ -21,6 +21,7 @@ function newScientist()
 	n.hit = 0
 	n.hp = 3
 	n.maxhp = 3
+	n.batteries = 0
 	n.type = "scientist"
 	n.saber = nil
 
@@ -271,5 +272,13 @@ function scientist:on_collide(e1, e2, dx, dy)
 		self.yspeed = -25
 		self.x = self.x + dx
 		self.hp = self.hp - 0.5
+	elseif e2.type == "battery" then
+		lutro.audio.play(sfx_pickup_battery)
+		self.batteries = self.batteries + 1
+		for i=1, #entities do
+			if entities[i] == e2 then
+				table.remove(entities, i)
+			end
+		end
 	end
 end

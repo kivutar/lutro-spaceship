@@ -34,9 +34,9 @@ function newScientist()
 		},
 		hit = {
 			left  = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_hit_left.png"),  48, 48, 1, 10),
+				"assets/scientist_hit_left.png"),  48, 48, 1, 60),
 			right = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_hit_right.png"), 48, 48, 1, 10)
+				"assets/scientist_hit_right.png"), 48, 48, 1, 60)
 		},
 		fall = {
 			left  = newAnimation(lutro.graphics.newImage(

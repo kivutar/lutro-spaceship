@@ -43,7 +43,10 @@ function part:on_collide(e1, e2, dx, dy)
 		if math.abs(dy) < math.abs(dx) and dy ~= 0 then
 			self.yspeed = -self.yspeed / 2
 			self.y = self.y + dy
-			lutro.audio.play(sfx_step)
+
+			if self.bounce == 16 then
+				lutro.audio.play(sfx_step)
+			end
 		end
 
 		if math.abs(dx) < math.abs(dy) and dx ~= 0 then

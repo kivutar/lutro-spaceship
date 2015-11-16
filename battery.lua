@@ -40,7 +40,7 @@ function battery:on_collide(e1, e2, dx, dy)
 		if math.abs(dy) < math.abs(dx) and dy ~= 0 then
 			self.yspeed = -self.yspeed / 2
 			self.y = self.y + dy
-			lutro.audio.play(sfx_step)
+			--lutro.audio.play(sfx_step)
 		end
 	end
 end

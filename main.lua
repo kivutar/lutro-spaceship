@@ -58,6 +58,10 @@ function lutro.load()
 	sfx_explode        = lutro.audio.newSource("assets/explode.wav")
 	sfx_pickup_battery = lutro.audio.newSource("assets/pickup_battery.wav")
 
+	font = lutro.graphics.newImageFont("assets/font.png",
+		"0123456789bx")
+	lutro.graphics.setFont(font)
+
 	camera_x = 0
 	camera_y = 0
 	screen_shake = 0

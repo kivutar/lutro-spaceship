@@ -354,6 +354,21 @@
                  "width":16,
                  "x":616,
                  "y":96
+                }, 
+                {
+                 "height":16,
+                 "id":58,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"wallbox",
+                 "visible":true,
+                 "width":16,
+                 "x":352,
+                 "y":128
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -362,7 +377,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":58,
+ "nextobjectid":59,
  "orientation":"orthogonal",
  "properties":
     {
@@ -374,7 +389,7 @@
         {
          "firstgid":1,
          "image":"spaceship.png",
-         "imageheight":128,
+         "imageheight":256,
          "imagewidth":256,
          "margin":0,
          "name":"spaceship",
@@ -383,12 +398,12 @@
 
             },
          "spacing":0,
-         "tilecount":128,
+         "tilecount":256,
          "tileheight":16,
          "tilewidth":16
         }, 
         {
-         "firstgid":129,
+         "firstgid":257,
          "image":"stars.png",
          "imageheight":240,
          "imagewidth":320,

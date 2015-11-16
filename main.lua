@@ -14,6 +14,7 @@ require "tube"
 require "screen"
 require "part"
 require "battery"
+require "wallbox"
 
 function lutro.conf(t)
 	t.width  = SCREEN_WIDTH
@@ -41,6 +42,8 @@ add_entity_from_map = function(object)
 		table.insert(entities, newScreen(object))
 	elseif object.type == "battery" then
 		table.insert(entities, newBattery(object))
+	elseif object.type == "wallbox" then
+		table.insert(entities, newWallBox(object))
 	end
 end
 
@@ -57,6 +60,7 @@ function lutro.load()
 	sfx_robot_die      = lutro.audio.newSource("assets/robot_die.wav")
 	sfx_explode        = lutro.audio.newSource("assets/explode.wav")
 	sfx_pickup_battery = lutro.audio.newSource("assets/pickup_battery.wav")
+	sfx_wallbox        = lutro.audio.newSource("assets/wallbox.wav")
 
 	font = lutro.graphics.newImageFont("assets/font.png",
 		"0123456789bx")

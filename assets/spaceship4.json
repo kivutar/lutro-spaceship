@@ -350,6 +350,21 @@
                  "width":14,
                  "x":257,
                  "y":66
+                }, 
+                {
+                 "height":16,
+                 "id":68,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "rotation":0,
+                 "type":"wallbox",
+                 "visible":true,
+                 "width":16,
+                 "x":352,
+                 "y":168
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -358,7 +373,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":68,
+ "nextobjectid":69,
  "orientation":"orthogonal",
  "properties":
     {

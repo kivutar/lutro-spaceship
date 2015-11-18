@@ -15,6 +15,7 @@ require "screen"
 require "part"
 require "battery"
 require "wallbox"
+require "walker"
 
 function lutro.conf(t)
 	t.width  = SCREEN_WIDTH
@@ -44,6 +45,8 @@ add_entity_from_map = function(object)
 		table.insert(entities, newBattery(object))
 	elseif object.type == "wallbox" then
 		table.insert(entities, newWallBox(object))
+	elseif object.type == "walker" then
+		table.insert(entities, newWalker(object))
 	end
 end
 

@@ -258,6 +258,18 @@ function scientist:on_collide(e1, e2, dx, dy)
 		self.y = self.y - 1
 		self.yspeed = -1
 		self.hp = self.hp - 0.5
+	elseif e2.type == "walker" and self.hit == 0 and e2.die == 0 then
+		lutro.audio.play(sfx_hit)
+		screen_shake = 0.25
+		self.hit = 30
+		if dx > 0 then
+			self.xspeed = 1.2
+		else
+			self.xspeed = -1.2
+		end
+		self.y = self.y - 1
+		self.yspeed = -1
+		self.hp = self.hp - 0.5
 	elseif e2.type == "ball" and self.hit == 0 and e2.die == 0 then
 		lutro.audio.play(sfx_hit)
 		screen_shake = 0.25

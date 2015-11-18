@@ -23,15 +23,15 @@ function newBigLaser(object)
 end
 
 function biglaser:update(dt)
-	self.counter = self.counter + dt
+	self.counter = self.counter + 1
 
-	if self.counter >= 0 and self.counter < 2 then
+	if self.counter >= 0 and self.counter < 120 then
 		self.stance = "off"
-	elseif self.counter >= 2 and self.counter < 3 then
+	elseif self.counter >= 120 and self.counter < 240 then
 		self.stance = "warn"
-	elseif self.counter >= 3 and self.counter < 5 then
+	elseif self.counter >= 240 and self.counter < 360 then
 		self.stance = "on"
-	elseif self.counter >= 5 then
+	elseif self.counter >= 360 then
 		self.counter = 0
 	end
 
@@ -45,7 +45,7 @@ function biglaser:update(dt)
 		self.anim = anim
 	end
 
-	self.anim:update(dt)
+	self.anim:update(1/60)
 end
 
 function biglaser:draw()

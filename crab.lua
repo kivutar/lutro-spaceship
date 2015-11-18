@@ -9,7 +9,7 @@ function newCrab(object)
 	n.height = 14
 	n.xspeed = 0
 	n.yspeed = 0
-	n.yaccel = 300
+	n.yaccel = 0.05
 	n.direction = "left"
 	n.stance = "run"
 	n.DO_JUMP = 0
@@ -21,9 +21,9 @@ function newCrab(object)
 	n.animations = {
 		run = {
 			left  = newAnimation(lutro.graphics.newImage(
-				"assets/crab_run_left.png"),  32, 32, 2, 10),
+				"assets/crab_run_left.png"),  32, 32, 2, 20),
 			right = newAnimation(lutro.graphics.newImage(
-				"assets/crab_run_right.png"), 32, 32, 2, 10)
+				"assets/crab_run_right.png"), 32, 32, 2, 20)
 		},
 		hit = {
 			left  = newAnimation(lutro.graphics.newImage(
@@ -51,15 +51,14 @@ end
 
 function crab:update(dt)
 	if self.hit > 0 then
-		self.hit = self.hit - dt
-	else
-		self.hit = 0
+		self.hit = self.hit - 1
 	end
 
 	if self.die > 0 then
-		self.die = self.die - dt
-	elseif self.die < 0 then
-		self.die = 0
+		self.die = self.die - 1
+	end
+
+	if self.die == 0 and self.hp == 0 then
 		lutro.audio.play(sfx_explode)
 		table.insert(entities, newBattery(
 				{x = self.x + self.width/2, y = self.y + self.height / 2}))
@@ -77,8 +76,8 @@ function crab:update(dt)
 
 	-- gravity
 	if not self:on_the_ground() then
-		self.yspeed = self.yspeed + self.yaccel * dt
-		self.y = self.y + dt * self.yspeed
+		self.yspeed = self.yspeed + self.yaccel
+		self.y = self.y + self.yspeed
 	end
 
 	if not solid_at(self.x     , self.y+14, self) and self.GOLEFT 
@@ -89,29 +88,29 @@ function crab:update(dt)
 
 	-- moving
 	if self.GOLEFT and self.hit == 0 and self.die == 0 then
-		self.xspeed = -50
-		self.direction = "left";
+		self.xspeed = -0.85
+		self.direction = "left"
 	elseif self.hit == 0 and self.die == 0 then
-		self.xspeed = 50
-		self.direction = "right";
+		self.xspeed = 0.85
+		self.direction = "right"
 	end
 
 	if self.hit > 0 then
 		if self.xspeed > 0 then
-			self.xspeed = self.xspeed - 2
+			self.xspeed = self.xspeed - 0.05
 			if self.xspeed < 0 then
-				self.xspeed = 0;
+				self.xspeed = 0
 			end
 		elseif self.xspeed < 0 then
-			self.xspeed = self.xspeed + 2;
+			self.xspeed = self.xspeed + 0.05;
 			if self.xspeed > 0 then
-				self.xspeed = 0;
+				self.xspeed = 0
 			end
 		end
 	end
 
 	-- apply speed
-	self.x = self.x + self.xspeed * dt;
+	self.x = self.x + self.xspeed;
 
 	if self.die > 0 then
 		self.stance = "die"
@@ -126,9 +125,9 @@ function crab:update(dt)
 	if anim ~= self.anim then
 		anim.timer = 0
 	end
-	self.anim = anim;
+	self.anim = anim
 
-	self.anim:update(dt)
+	self.anim:update(1/60)
 end
 
 function crab:draw()
@@ -156,19 +155,19 @@ function crab:on_collide(e1, e2, dx, dy)
 			self.xspeed = 0
 			self.GOLEFT = not self.GOLEFT
 		end
-	elseif e2.type == "saber" and (self.hit == 0 or self.hit < 0.4) and self.die == 0 then
+	elseif e2.type == "saber" and (self.hit == 0 or self.hit < 20) and self.die == 0 then
 		self.hp = self.hp - 1
 		if self.hp <= 0 then 
 			lutro.audio.play(sfx_robot_die)
-			self.die = 1.0
+			self.die = 60
 			self.xspeed = 0
 		else
 			lutro.audio.play(sfx_robot_hit)
-			self.hit = 1.0
+			self.hit = 60
 			if dx > 0 then
-				self.xspeed = 100
+				self.xspeed = 2
 			else
-				self.xspeed = -100
+				self.xspeed = -2
 			end
 		end
 	end

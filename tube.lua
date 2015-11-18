@@ -13,7 +13,7 @@ function newTube(object)
 end
 
 function tube:update(dt)
-	self.anim:update(dt)
+	self.anim:update(1/60)
 end
 
 function tube:draw()

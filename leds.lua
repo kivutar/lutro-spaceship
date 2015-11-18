@@ -14,7 +14,7 @@ function newLeds(object)
 end
 
 function leds:update(dt)
-	self.anim:update(dt)
+	self.anim:update(1/60)
 end
 
 function leds:draw()

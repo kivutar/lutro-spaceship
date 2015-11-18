@@ -27,12 +27,12 @@ end
 
 function ball:update(dt)
 	-- apply speed
-	self.x = self.x + self.xspeed * dt;
-	self.y = self.y + self.yspeed * dt;
+	self.x = self.x + self.xspeed;
+	self.y = self.y + self.yspeed;
 
 	self.anim = self.animations[self.stance]
 
-	self.anim:update(dt)
+	self.anim:update(1/60)
 end
 
 function ball:draw()

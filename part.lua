@@ -8,14 +8,14 @@ function newPart(object)
 	n.width = math.random(1, 4)
 	n.height = n.width
 
-	n.xspeed = 100*(math.random()-0.5)
-	n.yspeed = -200*(math.random())
-	n.yaccel = 300
+	n.xspeed = 2*(math.random()-0.5)
+	n.yspeed = -3*(math.random())
+	n.yaccel = 0.05
 
 	n.bounce = 16
 
 	n.anim = newAnimation(lutro.graphics.newImage(
-				"assets/part_"..n.width..".png"), n.width, n.height, 1, 10)
+			"assets/part_"..n.width..".png"), n.width, n.height, 1, 60)
 
 	n.anim.timer = math.random(0, 1)
 
@@ -23,12 +23,12 @@ function newPart(object)
 end
 
 function part:update(dt)
-	self.yspeed = self.yspeed + self.yaccel * dt
-	self.y = self.y + dt * self.yspeed
+	self.yspeed = self.yspeed + self.yaccel
+	self.y = self.y + self.yspeed
 
-	self.x = self.x + self.xspeed * dt;
+	self.x = self.x + self.xspeed;
 
-	self.anim:update(dt)
+	self.anim:update(1/60)
 end
 
 function part:draw()

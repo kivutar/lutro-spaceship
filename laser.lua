@@ -8,7 +8,7 @@ function newLaser(object)
 end
 
 function laser:update(dt)
-	self.laser:update(dt)
+	self.laser:update(1/60)
 end
 
 function laser:draw()

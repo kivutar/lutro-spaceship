@@ -13,7 +13,7 @@ function newScreen(object)
 end
 
 function screen:update(dt)
-	self.anim:update(dt)
+	self.anim:update(1/60)
 end
 
 function screen:draw()

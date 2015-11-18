@@ -10,22 +10,24 @@ function newBattery(object)
 	n.x = n.x - n.width/2
 	n.y = n.y - n.height/2
 
-	n.yspeed = -100
-	n.yaccel = 300
+	n.yspeed = -2
+	n.yaccel = 0.05
 
 	n.type = "battery"
 
+	n.bounce = 2
+
 	n.anim = newAnimation(lutro.graphics.newImage(
-				"assets/battery.png"), n.width, n.height, 1, 10)
+				"assets/battery.png"), n.width, n.height, 1, 1)
 
 	return setmetatable(n, battery)
 end
 
 function battery:update(dt)
-	self.yspeed = self.yspeed + self.yaccel * dt
-	self.y = self.y + dt * self.yspeed
+	self.yspeed = self.yspeed + self.yaccel
+	self.y = self.y + self.yspeed
 
-	self.anim:update(dt)
+	self.anim:update(1/60)
 end
 
 function battery:draw()
@@ -38,9 +40,14 @@ function battery:on_collide(e1, e2, dx, dy)
 	or e2.type == "laser"
 	then
 		if math.abs(dy) < math.abs(dx) and dy ~= 0 then
-			self.yspeed = -self.yspeed / 2
 			self.y = self.y + dy
-			--lutro.audio.play(sfx_step)
+			if self.bounce > 0 then
+				self.yspeed = -self.yspeed / 2
+				lutro.audio.play(sfx_step)
+				self.bounce = self.bounce - 1
+			else
+				self.yspeed = 0
+			end
 		end
 	end
 end

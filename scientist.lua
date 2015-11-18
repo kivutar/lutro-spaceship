@@ -9,8 +9,8 @@ function newScientist()
 	n.height = 24
 	n.xspeed = 0
 	n.yspeed = 0
-	n.xaccel = 100
-	n.yaccel = 300
+	n.xaccel = 0.05
+	n.yaccel = 0.05
 	n.x = (SCREEN_WIDTH - n.width) / 2
 	n.y = (SCREEN_HEIGHT - n.height) / 2
 	n.direction = "left"
@@ -28,9 +28,9 @@ function newScientist()
 	n.animations = {
 		stand = {
 			left  = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_stand_left.png"),  48, 48, 1, 10),
+				"assets/scientist_stand_left.png"),  48, 48, 1, 1),
 			right = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_stand_right.png"), 48, 48, 1, 10)
+				"assets/scientist_stand_right.png"), 48, 48, 1, 1)
 		},
 		hit = {
 			left  = newAnimation(lutro.graphics.newImage(
@@ -40,15 +40,15 @@ function newScientist()
 		},
 		fall = {
 			left  = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_fall_left.png"),  48, 48, 1, 10),
+				"assets/scientist_fall_left.png"),  48, 48, 1, 1),
 			right = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_fall_right.png"), 48, 48, 1, 10)
+				"assets/scientist_fall_right.png"), 48, 48, 1, 1)
 		},
 		jump = {
 			left  = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_jump_left.png"),  48, 48, 1, 10),
+				"assets/scientist_jump_left.png"),  48, 48, 1, 1),
 			right = newAnimation(lutro.graphics.newImage(
-				"assets/scientist_jump_right.png"), 48, 48, 1, 10)
+				"assets/scientist_jump_right.png"), 48, 48, 1, 1)
 		},
 		run = {
 			left  = newAnimation(lutro.graphics.newImage(
@@ -76,18 +76,15 @@ end
 
 function scientist:update(dt)
 	if self.hit > 0 then
-		self.hit = self.hit - dt
-	else
-		self.hit = 0
+		self.hit = self.hit - 1
 	end
 
 	if self.sab > 0 then
-		self.sab = self.sab - dt
+		self.sab = self.sab - 1
 	else
 		self.sab = 0
-		self.saber = nil
 		for i=1, #entities do
-			if entities[i].type == "saber" then
+			if entities[i] == self.saber then
 				table.remove(entities, i)
 			end
 		end
@@ -100,8 +97,8 @@ function scientist:update(dt)
 
 	-- gravity
 	if not self:on_the_ground() then
-		self.yspeed = self.yspeed + self.yaccel * dt
-		self.y = self.y + dt * self.yspeed
+		self.yspeed = self.yspeed + self.yaccel
+		self.y = self.y + self.yspeed
 	end
 
 	-- jumping
@@ -119,7 +116,7 @@ function scientist:update(dt)
 	end
 
 	if self.DO_SABER == 1 then
-		self.sab = 0.3
+		self.sab = 15
 		lutro.audio.play(sfx_saber)
 		self.saber = newSaber({holder = self})
 		table.insert(entities, self.saber)
@@ -127,33 +124,33 @@ function scientist:update(dt)
 
 	if self.DO_JUMP == 1 and self:on_the_ground() then
 		self.y = self.y - 1
-		self.yspeed = -100
+		self.yspeed = -1.5
 		lutro.audio.play(sfx_jump)
 	end
 
-	if self.DO_JUMP > 1 and self.DO_JUMP < 24 and self.yspeed < -90 then
-		self.yspeed = -100
+	if self.DO_JUMP > 0 and self.DO_JUMP < 20 and self.yspeed < -1.4 then
+		self.yspeed = -1.5
 	end
 
 	-- moving
 	if JOY_LEFT then
-		self.xspeed = self.xspeed - self.xaccel * dt;
-		if self.xspeed < -100 then
-			self.xspeed = -100
+		self.xspeed = self.xspeed - self.xaccel;
+		if self.xspeed < -1.5 then
+			self.xspeed = -1.5
 		end
 		self.direction = "left";
 	end
 
 	if JOY_RIGHT then
-		self.xspeed = self.xspeed + self.xaccel * dt;
-		if self.xspeed > 100 then
-			self.xspeed = 100
+		self.xspeed = self.xspeed + self.xaccel;
+		if self.xspeed > 1.5 then
+			self.xspeed = 1.5
 		end
 		self.direction = "right";
 	end
 
 	-- apply speed
-	self.x = self.x + self.xspeed * dt;
+	self.x = self.x + self.xspeed
 
 	-- decelerating
 	if not (JOY_RIGHT and self.xspeed > 0)
@@ -162,14 +159,14 @@ function scientist:update(dt)
 	or (self.DO_SABER > 0 and self.DO_SABER < 8 and self:on_the_ground())
 	then
 		if self.xspeed > 0 then
-			self.xspeed = self.xspeed - 10
+			self.xspeed = self.xspeed - 0.1
 			if self.xspeed < 0 then
-				self.xspeed = 0;
+				self.xspeed = 0
 			end
 		elseif self.xspeed < 0 then
-			self.xspeed = self.xspeed + 10;
+			self.xspeed = self.xspeed + 0.1
 			if self.xspeed > 0 then
-				self.xspeed = 0;
+				self.xspeed = 0
 			end
 		end
 	end
@@ -206,7 +203,7 @@ function scientist:update(dt)
 	end
 	self.anim = anim;
 
-	self.anim:update(dt)
+	self.anim:update(1/60)
 end
 
 function scientist:draw()
@@ -233,43 +230,45 @@ function scientist:on_collide(e1, e2, dx, dy)
 			self.x = tonumber(e2.properties.x)
 		end
 		self.y = self.y + tonumber(e2.properties.y)
-	elseif e2.type == "laser" and self.hit == 0 then
+	elseif e2.type == "laser" then
 		lutro.audio.play(sfx_laserhit)
 		screen_shake = 0.25
-		self.hit = 0.5
 		self.xspeed = - self.xspeed
 		self.x = self.x + dx
-		self.hp = self.hp - 1
+		if self.hit == 0 then
+			self.hp = self.hp - 1
+		end
+		self.hit = 30
 	elseif e2.type == "biglaser" and e2.stance == "on" and self.hit == 0 then
 		lutro.audio.play(sfx_laserhit)
 		screen_shake = 0.25
-		self.hit = 0.5
+		self.hit = 30
 		self.xspeed = - self.xspeed
 		self.x = self.x + dx
 		self.hp = self.hp - 2
 	elseif e2.type == "crab" and self.hit == 0 and e2.die == 0 then
 		lutro.audio.play(sfx_hit)
 		screen_shake = 0.25
-		self.hit = 0.5
+		self.hit = 30
 		if dx > 0 then
-			self.xspeed = 100
+			self.xspeed = 1.2
 		else
-			self.xspeed = -100
+			self.xspeed = -1.2
 		end
 		self.y = self.y - 1
-		self.yspeed = -50
+		self.yspeed = -1
 		self.hp = self.hp - 0.5
 	elseif e2.type == "ball" and self.hit == 0 and e2.die == 0 then
 		lutro.audio.play(sfx_hit)
 		screen_shake = 0.25
-		self.hit = 0.5
+		self.hit = 30
 		if dx > 0 then
-			self.xspeed = 50
+			self.xspeed = 1.2
 		else
-			self.xspeed = -50
+			self.xspeed = -1.2
 		end
 		self.y = self.y - 1
-		self.yspeed = -25
+		self.yspeed = -1
 		self.x = self.x + dx
 		self.hp = self.hp - 0.5
 	elseif e2.type == "battery" then

@@ -10,9 +10,6 @@ function newLifeBar()
 	return setmetatable(n, lifebar)
 end
 
-function lifebar:update(dt)
-end
-
 function lifebar:draw()
 	local hp = scientist.hp
 	for i=1,scientist.maxhp do

@@ -74,6 +74,8 @@ function scientist:on_the_ground()
 		or solid_at(self.x + 11, self.y+24, self)
 end
 
+
+
 function scientist:update(dt)
 	if self.hit > 0 then
 		self.hit = self.hit - 1
@@ -90,10 +92,10 @@ function scientist:update(dt)
 		end
 	end
 
-	local JOY_LEFT  = lutro.input.joypad("left")
-	local JOY_RIGHT = lutro.input.joypad("right")
-	local JOY_Y     = lutro.input.joypad("y")
-	local JOY_B     = lutro.input.joypad("b")
+	local JOY_LEFT  = lutro.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_LEFT)
+	local JOY_RIGHT = lutro.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_RIGHT)
+	local JOY_Y     = lutro.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_Y)
+	local JOY_B     = lutro.joystick.isDown(1, RETRO_DEVICE_ID_JOYPAD_B)
 
 	-- gravity
 	if not self:on_the_ground() then
